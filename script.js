@@ -1,38 +1,64 @@
 /* ============================================================
     OPENROUTESERVICE KEY
 ============================================================ */
-const ORS_API_KEY = "eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImQ3MDFmYmU1YzliZTQzYzZiNmQyMjYzYWMyMzYzNTBiIiwiaCI6Im11cm11cjY0In0=";
+const ORS_API_KEY =
+  "eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImQ3MDFmYmU1YzliZTQzYzZiNmQyMjYzYWMyMzYzNTBiIiwiaCI6Im11cm11cjY0In0=";
 
 /* ============================================================
     PIZZA PLACE DATA
 ============================================================ */
 let pizzaPlaces = [
-  { name: "Yorkside Pizza", lat: 41.3111904, lon: -72.9298712,
-    desc: "Very famous spot, not open as late but great quality and a change-up of the classic New Haven style. With a full large pizza costing $18.50" },
-
-  { name: "Pepes Pizza", lat: 41.3029629, lon: -72.9168943,
-    desc: "Classic Italian spot. Their classic peperoni will cost about $17.50." },
-
-  { name: "Pizza Empire", lat: 41.312842, lon: -72.9332021,
-    desc: "Great late-night hole-in-the-wall spot. A full pie runs $15.75." },
-
-  { name: "Bar Pizza", lat: 41.3060661, lon: -72.9303862,
-    desc: "Good vibes, thin crust, and great weekends. Pizza being on the pricey side with a large costing $25" },
-
-  { name: "Bobbi's Pizza", lat: 41.3116274, lon: -72.9307068,
-    desc: "'Detroit style' as advertised — awesome and unique. Will run you $16 for their standard pizza" },
-
-  { name: "EstEstEst", lat: 41.3087258, lon: -72.9335242,
-    desc: "Another solid late-night spot, and right by the Yale School of Art for all the students finishing a project late. A large pizza runs around $14.95" },
-
-  { name: "Brick Oven Pizza", lat: 41.3121331, lon: -72.9338354, 
-    desc: "As the name imples, you can't get a more traditionally cooked pizza. Their classic pies costs $14.50." }
+  {
+    name: "Yorkside Pizza",
+    lat: 41.3111904,
+    lon: -72.9298712,
+    desc: "Very famous spot, not open as late but great quality and a change-up of the classic New Haven style. A full large costs $18.50."
+  },
+  {
+    name: "Pepes Pizza",
+    lat: 41.3029629,
+    lon: -72.9168943,
+    desc: "Classic Italian spot. Their classic pepperoni costs about $17.50."
+  },
+  {
+    name: "Pizza Empire",
+    lat: 41.312842,
+    lon: -72.9332021,
+    desc: "Great late-night hole-in-the-wall spot. A full pie runs $15.75."
+  },
+  {
+    name: "Bar Pizza",
+    lat: 41.3060661,
+    lon: -72.9303862,
+    desc: "Good vibes, thin crust, and great weekends. A large costs $25."
+  },
+  {
+    name: "Bobbi's Pizza",
+    lat: 41.3116274,
+    lon: -72.9307068,
+    desc: "'Detroit style' as advertised — awesome and unique. Standard pizza costs $16."
+  },
+  {
+    name: "EstEstEst",
+    lat: 41.3087258,
+    lon: -72.9335242,
+    desc: "Solid late-night spot. A large pizza runs around $14.95."
+  },
+  {
+    name: "Brick Oven Pizza",
+    lat: 41.3121331,
+    lon: -72.9338354,
+    desc: "True brick-oven classic. Their basic pie costs $14.50."
+  }
 ];
 
 /* ============================================================
     MAP SETUP
 ============================================================ */
-const map = L.map("map", { zoomControl: false }).setView([41.3083, -72.9279], 15);
+const map = L.map("map", { zoomControl: false }).setView(
+  [41.3083, -72.9279],
+  15
+);
 
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   maxZoom: 19
@@ -53,7 +79,6 @@ function hideInfoCard() {
   document.getElementById("info-card").classList.remove("show");
 }
 
-
 /* ============================================================
     PLAYER + COMPASS
 ============================================================ */
@@ -61,10 +86,12 @@ let playerMarker = null;
 let targetLatLng = null;
 
 let compassHeading = 0;
+
 function updateCompass() {
-  const needle = document.getElementById("compass-needle");
-  needle.style.transform = `rotate(${-compassHeading}deg)`;
+  document.getElementById("compass-needle").style.transform =
+    `rotate(${-compassHeading}deg)`;
 }
+
 window.addEventListener("deviceorientation", e => {
   if (e.alpha != null) {
     compassHeading = e.alpha;
@@ -73,30 +100,48 @@ window.addEventListener("deviceorientation", e => {
 });
 
 /* ============================================================
-    ROUTE LAYERS
+    ROUTE LAYER
 ============================================================ */
 let routeLayer = null;
 
 /* ============================================================
-    GEOLOCATION & SORTING NEAREST PIZZA PLACES
+    FOLLOW MODE + SORTING
 ============================================================ */
 let followPlayer = true;
 
-map.on("dragstart", () => followPlayer = false);
+map.on("dragstart", () => (followPlayer = false));
 
+/* ============================================================
+    SORTING PLACES + MARKERS TOGETHER (IMPORTANT!)
+============================================================ */
 function sortPizzaPlacesByDistance() {
   if (!playerMarker) return;
 
   const user = playerMarker.getLatLng();
-  pizzaPlaces.sort((a, b) => {
-    const da = Math.hypot(a.lat - user.lat, a.lon - user.lng);
-    const db = Math.hypot(b.lat - user.lat, b.lon - user.lng);
+
+  // Combine
+  const combined = pizzaPlaces.map((p, i) => ({
+    place: p,
+    marker: pizzaMarkers[i]
+  }));
+
+  // Sort by distance
+  combined.sort((a, b) => {
+    const da = Math.hypot(a.place.lat - user.lat, a.place.lon - user.lng);
+    const db = Math.hypot(b.place.lat - user.lat, b.place.lon - user.lng);
     return da - db;
   });
+
+  // Unpack
+  pizzaPlaces = combined.map(x => x.place);
+  pizzaMarkers = combined.map(x => x.marker);
 
   cycleIndex = 0;
 }
 
+/* ============================================================
+    GPS + PLAYER MARKER
+============================================================ */
 if ("geolocation" in navigator) {
   navigator.geolocation.watchPosition(
     pos => {
@@ -112,7 +157,11 @@ if ("geolocation" in navigator) {
             iconAnchor: [25, 25]
           })
         }).addTo(map);
+      } else {
+        playerMarker.setLatLng(targetLatLng);
       }
+
+      if (followPlayer) map.panTo(targetLatLng);
 
       sortPizzaPlacesByDistance();
     },
@@ -144,27 +193,36 @@ pizzaPlaces.forEach(place => {
     showInfoCard(place.name, place.desc);
 
     if (!playerMarker) {
-      alert("GPS is still loading…");
+      alert("GPS still loading…");
       return;
     }
 
     const user = playerMarker.getLatLng();
     requestRoute(user.lat, user.lng, place.lat, place.lon);
+
+    map.flyTo([place.lat, place.lon], 17, { animate: true });
   });
 });
 
 /* ============================================================
-    FULL ROUTE FUNCTION
+    ROUTE REQUEST
 ============================================================ */
 async function requestRoute(startLat, startLon, endLat, endLon) {
-  const url = "https://api.openrouteservice.org/v2/directions/foot-walking/geojson";
+  const url =
+    "https://api.openrouteservice.org/v2/directions/foot-walking/geojson";
 
   try {
     const res = await fetch(url, {
       method: "POST",
-      headers: { "Authorization": ORS_API_KEY, "Content-Type": "application/json" },
+      headers: {
+        Authorization: ORS_API_KEY,
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify({
-        coordinates: [[startLon, startLat], [endLon, endLat]]
+        coordinates: [
+          [startLon, startLat],
+          [endLon, endLat]
+        ]
       })
     });
 
@@ -175,14 +233,13 @@ async function requestRoute(startLat, startLon, endLat, endLon) {
     routeLayer = L.geoJSON(data, {
       style: { color: "red", weight: 4 }
     }).addTo(map);
-
   } catch (err) {
     console.error("Route request error:", err);
   }
 }
 
 /* ============================================================
-    AUTO CYCLING
+    AUTO-CYCLE (IDLE MODE)
 ============================================================ */
 let autoCycleEnabled = false;
 let autoCycleInterval = null;
@@ -199,11 +256,12 @@ function startAutoCycle() {
   autoCycleInterval = setInterval(() => {
     if (!autoCycleEnabled || !playerMarker) return;
 
-    const place  = pizzaPlaces[cycleIndex];
+    const place = pizzaPlaces[cycleIndex];
     const marker = pizzaMarkers[cycleIndex];
 
     showInfoCard(place.name, place.desc);
-    map.panTo(marker.getLatLng(), { animate: true });
+
+    map.flyTo(marker.getLatLng(), 17, { animate: true });
 
     const user = playerMarker.getLatLng();
     requestRoute(user.lat, user.lng, place.lat, place.lon);
@@ -224,11 +282,11 @@ function pauseAutoCycle() {
 ============================================================ */
 function resetIdleTimer() {
   clearTimeout(idleTimeout);
-  idleTimeout = setTimeout(() => startAutoCycle(), IDLE_DELAY);
+  idleTimeout = setTimeout(startAutoCycle, IDLE_DELAY);
 }
 
 ["click", "touchstart", "mousemove", "mousedown", "wheel"].forEach(evt => {
-  window.addEventListener(evt, () => pauseAutoCycle());
+  window.addEventListener(evt, pauseAutoCycle);
 });
 
 resetIdleTimer();
@@ -242,5 +300,6 @@ document.getElementById("zoom-out").onclick = () => map.zoomOut();
 document.getElementById("follow-me").onclick = () => {
   followPlayer = true;
   if (playerMarker) map.panTo(playerMarker.getLatLng());
+  hideInfoCard();
   pauseAutoCycle();
 };
