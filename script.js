@@ -1,12 +1,8 @@
-/* ============================================================
-    OPENROUTESERVICE KEY
-============================================================ */
+
 const ORS_API_KEY =
   "eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImQ3MDFmYmU1YzliZTQzYzZiNmQyMjYzYWMyMzYzNTBiIiwiaCI6Im11cm11cjY0In0=";
 
-/* ============================================================
-    PIZZA PLACE DATA
-============================================================ */
+
 let pizzaPlaces = [
   {
     name: "Yorkside Pizza",
@@ -52,9 +48,7 @@ let pizzaPlaces = [
   }
 ];
 
-/* ============================================================
-    MAP SETUP
-============================================================ */
+
 const map = L.map("map", { zoomControl: false }).setView(
   [41.3083, -72.9279],
   15
@@ -64,9 +58,7 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   maxZoom: 19
 }).addTo(map);
 
-/* ============================================================
-    INFO CARD FUNCTIONS
-============================================================ */
+
 function showInfoCard(title, desc) {
   const card = document.getElementById("info-card");
   document.getElementById("info-card-title").innerText = title;
@@ -79,9 +71,7 @@ function hideInfoCard() {
   document.getElementById("info-card").classList.remove("show");
 }
 
-/* ============================================================
-    PLAYER + COMPASS
-============================================================ */
+
 let playerMarker = null;
 let targetLatLng = null;
 
@@ -99,49 +89,41 @@ window.addEventListener("deviceorientation", e => {
   }
 });
 
-/* ============================================================
-    ROUTE LAYER
-============================================================ */
+
 let routeLayer = null;
 
-/* ============================================================
-    FOLLOW MODE + SORTING
-============================================================ */
+
 let followPlayer = true;
 
 map.on("dragstart", () => (followPlayer = false));
 
-/* ============================================================
-    SORTING PLACES + MARKERS TOGETHER (IMPORTANT!)
-============================================================ */
+
 function sortPizzaPlacesByDistance() {
   if (!playerMarker) return;
 
   const user = playerMarker.getLatLng();
 
-  // Combine
+  
   const combined = pizzaPlaces.map((p, i) => ({
     place: p,
     marker: pizzaMarkers[i]
   }));
 
-  // Sort by distance
+  
   combined.sort((a, b) => {
     const da = Math.hypot(a.place.lat - user.lat, a.place.lon - user.lng);
     const db = Math.hypot(b.place.lat - user.lat, b.place.lon - user.lng);
     return da - db;
   });
 
-  // Unpack
+  
   pizzaPlaces = combined.map(x => x.place);
   pizzaMarkers = combined.map(x => x.marker);
 
   cycleIndex = 0;
 }
 
-/* ============================================================
-    GPS + PLAYER MARKER
-============================================================ */
+
 if ("geolocation" in navigator) {
   navigator.geolocation.watchPosition(
     pos => {
@@ -170,9 +152,7 @@ if ("geolocation" in navigator) {
   );
 }
 
-/* ============================================================
-    ADD PIZZA MARKERS
-============================================================ */
+
 let pizzaMarkers = [];
 
 pizzaPlaces.forEach(place => {
@@ -204,9 +184,7 @@ pizzaPlaces.forEach(place => {
   });
 });
 
-/* ============================================================
-    ROUTE REQUEST
-============================================================ */
+
 async function requestRoute(startLat, startLon, endLat, endLon) {
   const url =
     "https://api.openrouteservice.org/v2/directions/foot-walking/geojson";
@@ -238,9 +216,6 @@ async function requestRoute(startLat, startLon, endLat, endLon) {
   }
 }
 
-/* ============================================================
-    AUTO-CYCLE (IDLE MODE)
-============================================================ */
 let autoCycleEnabled = false;
 let autoCycleInterval = null;
 let idleTimeout = null;
@@ -277,9 +252,6 @@ function pauseAutoCycle() {
   resetIdleTimer();
 }
 
-/* ============================================================
-    IDLE DETECTION
-============================================================ */
 function resetIdleTimer() {
   clearTimeout(idleTimeout);
   idleTimeout = setTimeout(startAutoCycle, IDLE_DELAY);
@@ -291,9 +263,7 @@ function resetIdleTimer() {
 
 resetIdleTimer();
 
-/* ============================================================
-    UI BUTTONS
-============================================================ */
+
 document.getElementById("zoom-in").onclick = () => map.zoomIn();
 document.getElementById("zoom-out").onclick = () => map.zoomOut();
 

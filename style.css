@@ -4,7 +4,6 @@ html, body {
   height: 100%;
 }
 
-/* Banner */
 #banner {
   position: fixed;
   top: 0;
@@ -21,7 +20,6 @@ html, body {
   border-bottom: 3px solid #e0c347;
 }
 
-/* Map */
 #map {
   position: absolute;
   top: 60px;
@@ -31,7 +29,6 @@ html, body {
   z-index: 1;
 }
 
-/* Right-side Controls */
 #controls {
   position: fixed;
   top: 300px;
@@ -59,7 +56,6 @@ html, body {
   transform: scale(0.93);
 }
 
-/* Compass */
 #compass {
   position: fixed;
   top: 75px;
@@ -96,9 +92,6 @@ html, body {
 .south { bottom: 4px; left: 50%; transform: translateX(-50%); }
 .west  { left: 4px; top: 50%; transform: translateY(-50%); }
 
-/* =========================================
-     SINGLE POPUP INFO CARD (NEW + CLEAN)
-========================================= */
 
 #info-card {
   position: fixed;
@@ -115,20 +108,17 @@ html, body {
   text-align: center;
   z-index: 2000;
 
-  /* Hidden until JS activates */
   opacity: 0;
   display: none;
   transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
-/* Visible state */
 #info-card.show {
   display: block;
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
 
-/* Title */
 #info-card-title {
   font-size: 20px;
   font-weight: bold;
@@ -136,7 +126,6 @@ html, body {
   text-align: center;
 }
 
-/* Description */
 #info-card-desc {
   font-size: 16px;
   line-height: 1.3;
