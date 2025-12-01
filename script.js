@@ -42,7 +42,6 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     PLAYER + COMPASS
 ============================================================ */
 let playerMarker = null;
-let arrowMarker  = null;
 let targetLatLng = null;
 
 let compassHeading = 0;
@@ -99,15 +98,7 @@ if ("geolocation" in navigator) {
           })
         }).addTo(map);
 
-        arrowMarker = L.marker(targetLatLng, {
-          icon: L.icon({
-            iconUrl: "Images/arrow_up_transparent.png",
-            iconSize: [45, 45],
-            iconAnchor: [22, 22]
-          }),
-          rotationAngle: 0,
-          rotationOrigin: "center"
-        }).addTo(map);
+       
       }
 
       
@@ -119,23 +110,7 @@ if ("geolocation" in navigator) {
 }
 
 
-setInterval(() => {
-  if (playerMarker && targetLatLng) {
-    const cur = playerMarker.getLatLng();
-    const smooth = L.latLng(
-      cur.lat + (targetLatLng.lat - cur.lat) * 0.15,
-      cur.lng + (targetLatLng.lng - cur.lng) * 0.15
-    );
 
-    playerMarker.setLatLng(smooth);
-    arrowMarker.setLatLng(smooth);
-    arrowMarker.setRotationAngle(compassHeading);
-
-    if (followPlayer) {
-      map.panTo(smooth, { animate: true, duration: 0.3 });
-    }
-  }
-}, 50);
 
 /* ============================================================
     ADD PIZZA MARKERS
