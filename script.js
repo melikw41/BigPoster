@@ -39,17 +39,20 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 }).addTo(map);
 
 /* ============================================================
-    INFO BOX FUNCTIONS
+    INFO CARD FUNCTIONS
 ============================================================ */
-function showInfoBox(title, desc) {
-  document.getElementById("info-title").innerText = title;
-  document.getElementById("info-desc").innerText = desc;
-  document.getElementById("info-box").classList.remove("hidden");
+function showInfoCard(title, desc) {
+  const card = document.getElementById("info-card");
+  document.getElementById("info-card-title").innerText = title;
+  document.getElementById("info-card-desc").innerText = desc;
+
+  card.classList.add("show");
 }
 
-function hideInfoBox() {
-  document.getElementById("info-box").classList.add("hidden");
+function hideInfoCard() {
+  document.getElementById("info-card").classList.remove("show");
 }
+
 
 /* ============================================================
     PLAYER + COMPASS
@@ -138,7 +141,7 @@ pizzaPlaces.forEach(place => {
     pauseAutoCycle();
     followPlayer = false;
 
-    showInfoBox(place.name, place.desc);
+    showInfoCard(place.name, place.desc);
 
     if (!playerMarker) {
       alert("GPS is still loading…");
@@ -199,7 +202,7 @@ function startAutoCycle() {
     const place  = pizzaPlaces[cycleIndex];
     const marker = pizzaMarkers[cycleIndex];
 
-    showInfoBox(place.name, place.desc);
+    showInfoCard(place.name, place.desc);
     map.panTo(marker.getLatLng(), { animate: true });
 
     const user = playerMarker.getLatLng();
