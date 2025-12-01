@@ -14,19 +14,19 @@ let pizzaPlaces = [
     name: "Pepes Pizza",
     lat: 41.3029629,
     lon: -72.9168943,
-    desc: "Classic Italian spot. Their classic pepperoni costs about $17.50."
+    desc: "Classic Italian spot, one of the bastions of pizza in New Haven. Their classic pepperoni costs about $17.50."
   },
   {
     name: "Pizza Empire",
     lat: 41.312842,
     lon: -72.9332021,
-    desc: "Great late-night hole-in-the-wall spot. A full pie runs $15.75."
+    desc: "Great late-night hole-in-the-wall spot with super friendly staff. A full pie runs $15.75."
   },
   {
     name: "Bar Pizza",
     lat: 41.3060661,
     lon: -72.9303862,
-    desc: "Good vibes, thin crust, and great weekends. A large costs $25."
+    desc: "Good vibes, super thin crust, and great on weekends (as long as you're +21). A large costs $25."
   },
   {
     name: "Bobbi's Pizza",
@@ -38,13 +38,13 @@ let pizzaPlaces = [
     name: "EstEstEst",
     lat: 41.3087258,
     lon: -72.9335242,
-    desc: "Solid late-night spot. A large pizza runs around $14.95."
+    desc: "Solid spot, and right by the Yale School of Art for any students who need a late night snack. A large pizza runs around $14.95."
   },
   {
     name: "Brick Oven Pizza",
     lat: 41.3121331,
     lon: -72.9338354,
-    desc: "True brick-oven classic. Their basic pie costs $14.50."
+    desc: "As the name implies you can't get a more classicly cooked pizza. Their basic pie costs $14.50."
   }
 ];
 
