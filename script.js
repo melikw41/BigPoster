@@ -79,7 +79,7 @@ function sortPizzaPlacesByDistance() {
     return da - db;
   });
 
-  // rebuild idle cycling order
+  
   cycleIndex = 0;
 }
 
@@ -110,7 +110,7 @@ if ("geolocation" in navigator) {
         }).addTo(map);
       }
 
-      // Update nearest pizza order
+      
       sortPizzaPlacesByDistance();
     },
     err => console.error("GPS error:", err),
@@ -118,7 +118,7 @@ if ("geolocation" in navigator) {
   );
 }
 
-/* Smooth follow loop */
+
 setInterval(() => {
   if (playerMarker && targetLatLng) {
     const cur = playerMarker.getLatLng();
@@ -204,7 +204,7 @@ let autoCycleInterval = null;
 let idleTimeout = null;
 let cycleIndex = 0;
 
-const IDLE_DELAY = 10000; // 10 seconds idle
+const IDLE_DELAY = 10000;
 
 function startAutoCycle() {
   if (autoCycleInterval) return;
