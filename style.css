@@ -122,3 +122,26 @@ html, body {
 .south { bottom: 4px; left: 50%; transform: translateX(-50%); }
 .west  { left: 4px; top: 50%; transform: translateY(-50%); }
 
+#info-box {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.92);
+  padding: 18px 20px;
+  text-align: center;
+  border-top: 2px solid #ccc;
+  font-family: sans-serif;
+  z-index: 9999;
+}
+
+#info-title {
+  font-weight: bold;
+  font-size: 20px;
+  margin-bottom: 6px;
+}
+
+#info-desc {
+  font-size: 16px;
+  line-height: 1.3em;
+}

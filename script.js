@@ -24,7 +24,7 @@ let pizzaPlaces = [
 
   { name: "EstEstEst", lat: 41.3087258, lon: -72.9335242,
     desc: "Another solid late-night spot, and right by the Yale School of Art for all the students finishing a project late. A large pizza runs around $14.95" },
-    
+
   { name: "Brick Oven Pizza", lat: 41.3121331, lon: -72.9338354, 
     desc: "As the name imples, you can't get a more traditionally cooked pizza. Their classic pies costs $14.50." }
 ];
@@ -37,6 +37,19 @@ const map = L.map("map", { zoomControl: false }).setView([41.3083, -72.9279], 15
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   maxZoom: 19
 }).addTo(map);
+
+/* ============================================================
+    INFO BOX FUNCTIONS
+============================================================ */
+function showInfoBox(title, desc) {
+  document.getElementById("info-title").innerText = title;
+  document.getElementById("info-desc").innerText = desc;
+  document.getElementById("info-box").classList.remove("hidden");
+}
+
+function hideInfoBox() {
+  document.getElementById("info-box").classList.add("hidden");
+}
 
 /* ============================================================
     PLAYER + COMPASS
@@ -59,7 +72,7 @@ window.addEventListener("deviceorientation", e => {
 /* ============================================================
     ROUTE LAYERS
 ============================================================ */
-let routeLayer = null; // full route
+let routeLayer = null;
 
 /* ============================================================
     GEOLOCATION & SORTING NEAREST PIZZA PLACES
@@ -78,7 +91,6 @@ function sortPizzaPlacesByDistance() {
     return da - db;
   });
 
-  
   cycleIndex = 0;
 }
 
@@ -97,20 +109,14 @@ if ("geolocation" in navigator) {
             iconAnchor: [25, 25]
           })
         }).addTo(map);
-
-       
       }
 
-      
       sortPizzaPlacesByDistance();
     },
     err => console.error("GPS error:", err),
     { enableHighAccuracy: true }
   );
 }
-
-
-
 
 /* ============================================================
     ADD PIZZA MARKERS
@@ -126,12 +132,13 @@ pizzaPlaces.forEach(place => {
     })
   }).addTo(map);
 
-  marker.bindPopup(`<b>${place.name}</b><br>${place.desc}`);
   pizzaMarkers.push(marker);
 
   marker.on("click", () => {
     pauseAutoCycle();
     followPlayer = false;
+
+    showInfoBox(place.name, place.desc);
 
     if (!playerMarker) {
       alert("GPS is still loading…");
@@ -144,7 +151,7 @@ pizzaPlaces.forEach(place => {
 });
 
 /* ============================================================
-    FULL ROUTE FUNCTION (not preview)
+    FULL ROUTE FUNCTION
 ============================================================ */
 async function requestRoute(startLat, startLon, endLat, endLon) {
   const url = "https://api.openrouteservice.org/v2/directions/foot-walking/geojson";
@@ -172,7 +179,7 @@ async function requestRoute(startLat, startLon, endLat, endLon) {
 }
 
 /* ============================================================
-    AUTO CYCLING (NOW WITH FULL ROUTE + NEAREST ORDER)
+    AUTO CYCLING
 ============================================================ */
 let autoCycleEnabled = false;
 let autoCycleInterval = null;
@@ -186,20 +193,15 @@ function startAutoCycle() {
 
   autoCycleEnabled = true;
 
-  autoCycleInterval = setInterval(async () => {
+  autoCycleInterval = setInterval(() => {
     if (!autoCycleEnabled || !playerMarker) return;
 
     const place  = pizzaPlaces[cycleIndex];
     const marker = pizzaMarkers[cycleIndex];
 
-    // Switch popup
-    pizzaMarkers.forEach(m => m.closePopup());
-    marker.openPopup();
-
-    // Pan map
+    showInfoBox(place.name, place.desc);
     map.panTo(marker.getLatLng(), { animate: true });
 
-    // Full route
     const user = playerMarker.getLatLng();
     requestRoute(user.lat, user.lng, place.lat, place.lon);
 
@@ -231,10 +233,7 @@ resetIdleTimer();
 /* ============================================================
     UI BUTTONS
 ============================================================ */
-document.getElementById("zoom-in").onclick = () => {
-  map.zoomIn();
-};
-
+document.getElementById("zoom-in").onclick = () => map.zoomIn();
 document.getElementById("zoom-out").onclick = () => map.zoomOut();
 
 document.getElementById("follow-me").onclick = () => {
