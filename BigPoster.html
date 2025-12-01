@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Grab a Slice in New Haven</title>
+
+  <!-- Leaflet CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+
+  <!-- Your CSS -->
+  <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+  <div id="banner">Grab a slice in New Haven!🤤🍕</div>
+
+  <div id="map"></div>
+
+  <div id="compass">
+    <div id="compass-needle"></div>
+    <div id="compass-labels">
+      <span class="north">N</span>
+      <span class="east">E</span>
+      <span class="south">S</span>
+      <span class="west">W</span>
+    </div>
+  </div>
+
+  <div id="controls">
+    <button id="zoom-in">+</button>
+    <button id="follow-me">◎</button>
+    <button id="zoom-out">−</button>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Leaflet Rotated Marker Plugin -->
+  <script src="https://rawcdn.githack.com/bbecquet/Leaflet.RotatedMarker/master/leaflet.rotatedMarker.js"></script>
+
+  <!-- Your JS -->
+  <script src="script.js"></script>
+
+</body>
+</html>
